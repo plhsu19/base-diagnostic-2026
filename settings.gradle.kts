@@ -1,0 +1,1 @@
+rootProject.name = "base-diagnostic_Nov_2026"
