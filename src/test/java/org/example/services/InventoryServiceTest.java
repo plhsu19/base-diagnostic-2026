@@ -1,5 +1,6 @@
 package org.example.services;
 
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Map;
@@ -13,10 +14,18 @@ class InventoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        defaultStock = Map.of("PEN", 5, "BOOK", 2);
+        defaultStock = new HashMap<>(Map.of("PEN", 5, "BOOK", 2));
         service = new InventoryService(
             defaultStock
         );
+    }
+
+    @Test
+    void constructShouldNotChangeOriginalStockMap() {
+        defaultStock.replace("PEN", 10);
+        defaultStock.put("BALL", 3);
+        assertEquals(5, service.available("PEN"));
+        assertThrows(IllegalArgumentException.class, () -> service.available("BALL"));
     }
 
     @Test
@@ -29,6 +38,7 @@ class InventoryServiceTest {
         assertEquals(5, penStock);
         assertEquals(2, bookStock);
     }
+
     @Test
     void availableThrowsExceptionWithInvalidArguments() {
         assertThrows(IllegalArgumentException.class, () -> service.available(null));
@@ -36,6 +46,7 @@ class InventoryServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.available("BALL"));
         assertThrows(IllegalArgumentException.class, () -> service.available("Pen"));
     }
+
     @Test
     void reserveReservesQuantitiesAndReturnsCurrentAvailableStock() {
         int afterReservedPenStock = service.reserve("PEN", 3);
@@ -43,6 +54,7 @@ class InventoryServiceTest {
         assertEquals(2, afterReservedPenStock);
         assertEquals(0, afterReservedBookStock);
     }
+
     @Test
     void reserveThrowsExceptionWithInvalidArguments() {
         assertThrows(IllegalArgumentException.class, () -> service.reserve(null, 2));
@@ -53,20 +65,3 @@ class InventoryServiceTest {
         assertThrows(IllegalStateException.class, () -> service.reserve("PEN", 6));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
