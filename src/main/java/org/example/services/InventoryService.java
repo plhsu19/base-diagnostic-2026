@@ -34,7 +34,7 @@ public final class InventoryService {
         if (updatedQuantity >= 0) {
             stock.replace(sku, updatedQuantity);
         } else {
-            throw new IllegalStateException("insufficient stock");
+            throw new IllegalStateException(String.format("insufficient stock of %s to reserve", sku));
         }
         return updatedQuantity;
     }

@@ -62,6 +62,7 @@ class InventoryServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.reserve("BALL", 2));
         assertThrows(IllegalArgumentException.class, () -> service.reserve("Pen", 2));
         assertThrows(IllegalArgumentException.class, () -> service.reserve("PEN", 0));
-        assertThrows(IllegalStateException.class, () -> service.reserve("PEN", 6));
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> service.reserve("PEN", 6));
+        assertEquals("insufficient stock of PEN to reserve", e.getMessage());
     }
 }
